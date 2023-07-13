@@ -3,3 +3,20 @@
 # we will be investigating whether sex makes an individual more prone to a certain ailment or disease
 # if sex does affect how prone a person is, we also want to identify which sex contributes to that vulnerability
 #hi friend
+
+#yoinking pakige
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+
+# now snatch data
+ahData = pd.read_csv("AH_Monthly_Provisional_Counts_of_Deaths_for_Select_Causes_of_Death_by_Sex_Age_and_Race_and_Hispanic_Origin.csv")
+ccData = pd.read_csv("CC_R20_P08_v10_D18_WWDSE_Cond.csv")
+nchsData = pd.read_csv("NCHS_-_Leading_Causes_of_Death__United_States.csv")
+monthlyData = pd.read_csv("Monthly_Counts_of_Deaths_by_Select_Causes__2014-2019.csv")
+
+#gotta see how it looks yk?
+ahData.describe()
+ccData.describe()
+nchsData.describe()
+monthlyData.describe()
