@@ -8,7 +8,7 @@ Ro: KismetnCo
 
 Research question:
 - Which causes of death (neurological, muscular, cardio, respiratory), are most common /
-more fatal to a given population (@ higher recorded death rates for males, females,
+more fatal to a given population (@ sex)
 different races)
 
 Expected coding work to be done:
