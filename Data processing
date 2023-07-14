@@ -2,10 +2,10 @@
 
 '''
 data will be assessed for cause of death, number of deaths, and sex of the deceased.
- we will be investigating whether sex makes an individual more prone to a certain ailment or disease
- if sex does affect how prone a person is, we also want to identify which sex contributes to that vulnerability
- ++ this is over the years / over the months, so take it with a grain of salt- we're going to be looking at overall trends
- so mostly percents of deaths in populations/overwhelmingly high-density causes
+we will be investigating whether sex makes an individual more prone to a certain ailment or disease
+if sex does affect how prone a person is, we also want to identify which sex contributes to that vulnerability
+++ this is over the years / over the months, so take it with a grain of salt- we're going to be looking at overall trends
+so mostly percents of deaths in populations/overwhelmingly high-density causes
 '''
 
 # imports woo
@@ -23,8 +23,8 @@ ahFAC = pd.to_numeric(ahdata.query("Sex == 'F'")["AllCause"]).sum()
 ahMAC = pd.to_numeric(ahdata.query("Sex == 'M'")["AllCause"]).sum()
 
 # check if it worked - success (uncommented for review)
- print(ahFAC)
- print(ahMAC)
+print(ahFAC)
+print(ahMAC)
 
 # list it
 ahACbySex = {"Female":ahFAC, "Male":ahMAC}
@@ -44,17 +44,17 @@ plt.show()
 
 
 ''' This dataset has more logs for Males than Females, so we're going to be treating it as percents for general distributions
- as in "x% of females and y% of males represented by this dataset died of the plague" for each of the data sets
- "so we can conclude that <insert sex here> are on average z-times more likely to die of the plague"
- ^ an example (the plague isn't actually represented here + we're doing it by zone/type of affliction) 
- '''
+as in "x% of females and y% of males represented by this dataset died of the plague" for each of the data sets
+"so we can conclude that <insert sex here> are on average z-times more likely to die of the plague"
+^ an example (the plague isn't actually represented here + we're doing it by zone/type of affliction) 
+'''
 
 '''
- we're going to do the same thing but with respiratory afflictions
- that's p, q, r on excel, or 15-17 with indexing
- includes influenza + pneumonia + chronic lower respiratory diseases
- and other respiratory diseases
- individual listed ailments first though
+we're going to do the same thing but with respiratory afflictions
+that's p, q, r on excel, or 15-17 with indexing
+includes influenza + pneumonia + chronic lower respiratory diseases
+and other respiratory diseases
+individual listed ailments first though
 '''
 
 # First: Influenza + pneumonia (column 16, indexed as 15)
@@ -62,8 +62,8 @@ ahFIP = pd.to_numeric(ahdata.query("Sex == 'F'")["Influenza and pneumonia (J09-J
 ahMIP = pd.to_numeric(ahdata.query("Sex == 'M'")["Influenza and pneumonia (J09-J18)"]).sum()
 
 #checking to see if it works - success (uncommented for review)
- print(ahFIP)
- print(ahMIP)
+print(ahFIP)
+print(ahMIP)
 
 # make it a set for the graph
 ahIPbySex = {"Female": ahFIP, "Male": ahMIP}
@@ -71,9 +71,9 @@ ahIP = list(ahIPbySex.values())
 ahSIP = list(ahIPbySex.keys())
 
 # get percents of total deaths due to influenza or pneumonia for comparison (uncommented prints for review)
- print(ahFIP/ahFAC)
+print(ahFIP/ahFAC)
 # = 0.01820240975371677 = ~ 1.82% of all female deaths in AHdata were influenza or pneumonia
-  print(ahMIP/ahMAC)
+print(ahMIP/ahMAC)
 # = 0.01672162961756643 = ~ 1.67% of all male deaths in AHdata were influenza or pneumonia
 
 # now for % of IP total that were female, male (uncommented prints for review)
@@ -112,8 +112,8 @@ plt.show()
 ahFCLRD = pd.to_numeric(ahdata.query("Sex == 'F'")["Chronic lower respiratory diseases (J40-J47)"]).sum()
 ahMCLRD = pd.to_numeric(ahdata.query("Sex == 'M'")["Chronic lower respiratory diseases (J40-J47)"]).sum()
 # checking to see if it works - success (uncommented for review)
- print(ahFCLRD)
- print(ahMCLRD)
+print(ahFCLRD)
+print(ahMCLRD)
 
 # cool now percents out of total female, male populations and compare to percents of total CLRD population (uncommented prints for review)
 print(ahFCLRD/ahFAC)
