@@ -137,8 +137,6 @@ ahSCLRD = list(ahCLRDbySex.keys())
 
 fig = plt.figure(figsize = (10, 5))
 plt.bar(ahSCLRD, ahCLRD, color='#2A9E64', width=0.4)
-# respiratory diseases are green now
-# the colour of phlegm
 plt.xlabel("Sex")
 plt.ylabel("Number of Fatalities in Ten Thousands (Chronic Lower Respiratory Disease)")
 plt.title("Number of Deaths by Sex (Chronic Lower Respiratory Disease) - AH")
