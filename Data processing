@@ -13,7 +13,7 @@ import matplotlib.pyplot as plt
 #OG files: AH_Monthly_Provisional_Counts_of_Deaths_for_Select_Causes_of_Death_by_Sex__Age__and_Race_and_Hispanic_Origin.csv
 #OG files: New_York_City_Leading_Causes_of_Death.csv
 #Files used: altered so every "Female" value = "F", every "Male" value = M
-# NY File altered so every "Deaths" value containing "." is removed, arranged by Leading Cause and Sex alphabetically
+# NY File altered so every "Deaths" value containing "." is removed
 # snatch files
 ahdata = pd.read_csv("C:/Python/pyb_data/AH_Monthly_Provisional_Counts_of_Deaths_for_Select_Causes_of_Death_by_Sex__Age__and_Race_and_Hispanic_Origin.csv", delimiter = ",")
 nydata = pd.read_csv("C:/Python/pyb_data/New_York_City_Leading_Causes_of_Death.csv", delimiter = ",")
