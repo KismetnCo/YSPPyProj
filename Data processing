@@ -79,7 +79,7 @@ ahIPT = (ahFIP + ahMIP)
 #print(ahFIP/ahIPT)
 # = 0.5049817203005103  = ~ 50.50% of influenza + pneumonia deaths were female
 #print(ahMIP/ahIPT)
-# = 0.49501827969948975 = ~ 49.50% of influenza + pneumonia deaths were female
+# = 0.49501827969948975 = ~ 49.50% of influenza + pneumonia deaths were male
 
 '''
 out of the total death count on behalf of influenza and pneumonia, according to AHdata, females are ~1% more likely to 
