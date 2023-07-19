@@ -1,19 +1,20 @@
 # this file is for uploading and sorting data --- WARNING: All graphs are pretty limited, will become more important as more data is introduced (@ the weekend)
 
+'''data will be assessed for cause of death, number of deaths, and sex of the deceased.
+ we will be investigating whether sex makes an individual more prone to a certain ailment or disease
+ if sex does affect how prone a person is, we also want to identify which sex contributes to that vulnerability
+ ++ this is over the years / over the months, so take it with a grain of salt- we're going to be looking at overall trends
+ so mostly percents of deaths in populations/overwhelmingly high-density causes
 '''
-data will be assessed for cause of death, number of deaths, and sex of the deceased.
-we will be investigating whether sex makes an individual more prone to a certain ailment or disease
-if sex does affect how prone a person is, we also want to identify which sex contributes to that vulnerability
-++ this is over the years / over the months, so take it with a grain of salt- we're going to be looking at overall trends
-so mostly percents of deaths in populations/overwhelmingly high-density causes
-'''
-
 # imports woo
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
-
-# snatch files (adjusted because wow those other ones were illegible -  might grab more later)
+#OG files: AH_Monthly_Provisional_Counts_of_Deaths_for_Select_Causes_of_Death_by_Sex__Age__and_Race_and_Hispanic_Origin.csv
+#OG files: New_York_City_Leading_Causes_of_Death.csv
+#Files used: altered so every "Female" value = "F", every "Male" value = M
+# NY File altered so every "Deaths" value containing "." is removed, arranged by Leading Cause and Sex alphabetically
+# snatch files
 ahdata = pd.read_csv("C:/Python/pyb_data/AH_Monthly_Provisional_Counts_of_Deaths_for_Select_Causes_of_Death_by_Sex__Age__and_Race_and_Hispanic_Origin.csv", delimiter = ",")
 nydata = pd.read_csv("C:/Python/pyb_data/New_York_City_Leading_Causes_of_Death.csv", delimiter = ",")
 
@@ -21,18 +22,14 @@ nydata = pd.read_csv("C:/Python/pyb_data/New_York_City_Leading_Causes_of_Death.c
 # get sums of total deaths (by sex) of ahdata
 ahFAC = pd.to_numeric(ahdata.query("Sex == 'F'")["AllCause"]).sum()
 ahMAC = pd.to_numeric(ahdata.query("Sex == 'M'")["AllCause"]).sum()
-
-# check if it worked - success (uncommented for review)
-print(ahFAC)
-print(ahMAC)
-
+# check if it worked - success
+# print(ahFAC)
+# print(ahMAC)
 # list it
 ahACbySex = {"Female":ahFAC, "Male":ahMAC}
 ahTAC = list(ahACbySex.values())
 ahS = list(ahACbySex.keys())
-
 # neat now barchart that
-# i'm commenting this out before because i dont want to see this load every time i run the code (uncommented for review)
 
 
 fig = plt.figure(figsize = (10, 5))
@@ -42,48 +39,46 @@ plt.ylabel("Number of Fatalities in Millions (All Causes)")
 plt.title("Number of Deaths by Sex (All Causes) - AH")
 plt.show()
 
-
 ''' This dataset has more logs for Males than Females, so we're going to be treating it as percents for general distributions
-as in "x% of females and y% of males represented by this dataset died of the plague" for each of the data sets
-"so we can conclude that <insert sex here> are on average z-times more likely to die of the plague"
-^ an example (the plague isn't actually represented here + we're doing it by zone/type of affliction) 
-'''
+ as in "x% of females and y% of males represented by this dataset died of the plague" for each of the data sets
+ "so we can conclude that <insert sex here> are on average z-times more likely to die of the plague"
+ ^ an example (the plague isn't actually represented here + we're doing it by zone/type of affliction) 
+ '''
 
 '''
-we're going to do the same thing but with respiratory afflictions
-that's p, q, r on excel, or 15-17 with indexing
-includes influenza + pneumonia + chronic lower respiratory diseases
-and other respiratory diseases
-individual listed ailments first though
+ we're going to do the same thing but with respiratory afflictions
+ that's p, q, r on excel, or 15-17 with indexing
+ includes influenza + pneumonia + chronic lower respiratory diseases
+ and other respiratory diseases
+ individual listed ailments first though
 '''
 
 # First: Influenza + pneumonia (column 16, indexed as 15)
 ahFIP = pd.to_numeric(ahdata.query("Sex == 'F'")["Influenza and pneumonia (J09-J18)"]).sum()
 ahMIP = pd.to_numeric(ahdata.query("Sex == 'M'")["Influenza and pneumonia (J09-J18)"]).sum()
-
-#checking to see if it works - success (uncommented for review)
-print(ahFIP)
-print(ahMIP)
+#checking to see if it works - success
+# print(ahFIP)
+# print(ahMIP)
 
 # make it a set for the graph
 ahIPbySex = {"Female": ahFIP, "Male": ahMIP}
 ahIP = list(ahIPbySex.values())
 ahSIP = list(ahIPbySex.keys())
 
-# get percents of total deaths due to influenza or pneumonia for comparison (uncommented prints for review)
-print(ahFIP/ahFAC)
+# get percents of total deaths due to influenza or pneumonia for comparison
+# print(ahFIP/ahFAC)
 # = 0.01820240975371677 = ~ 1.82% of all female deaths in AHdata were influenza or pneumonia
-print(ahMIP/ahMAC)
+# print(ahMIP/ahMAC)
 # = 0.01672162961756643 = ~ 1.67% of all male deaths in AHdata were influenza or pneumonia
 
-# now for % of IP total that were female, male (uncommented prints for review)
+# now for % of IP total that were female, male
 ahIPT = (ahFIP + ahMIP)
-print(ahIPT)
+#print(ahIPT)
 # = total I+P = 49782
 
-print(ahFIP/ahIPT)
+#print(ahFIP/ahIPT)
 # = 0.5049817203005103  = ~ 50.50% of influenza + pneumonia deaths were female
-print(ahMIP/ahIPT)
+#print(ahMIP/ahIPT)
 # = 0.49501827969948975 = ~ 49.50% of influenza + pneumonia deaths were female
 
 '''
@@ -96,41 +91,37 @@ compared to total male stats; more females are likely to die of I + P than males
 they contract I + P) 
 '''
 
-# bar plots woo + commenting it out because i don't want to see it right now (uncommented for review)
-
+# bar plots woo
 fig = plt.figure(figsize = (10, 5))
 plt.bar(ahSIP, ahIP, color='#54EA9F', width=0.4)
-# respiratory diseases are shades of green now
-# the colour of phlegm
 plt.xlabel("Sex")
 plt.ylabel("Number of Fatalities in Ten Thousands (Influenza and Pneumonia)")
 plt.title("Number of Deaths by Sex (Influenza and Pneumonia) - AH")
 plt.show()
 
-
 # now it's time to do that all over again for chronic lower respiratory disease
 ahFCLRD = pd.to_numeric(ahdata.query("Sex == 'F'")["Chronic lower respiratory diseases (J40-J47)"]).sum()
 ahMCLRD = pd.to_numeric(ahdata.query("Sex == 'M'")["Chronic lower respiratory diseases (J40-J47)"]).sum()
-# checking to see if it works - success (uncommented for review)
-print(ahFCLRD)
-print(ahMCLRD)
+# checking to see if it works - success
+# print(ahFCLRD)
+# print(ahMCLRD)
 
-# cool now percents out of total female, male populations and compare to percents of total CLRD population (uncommented prints for review)
-print(ahFCLRD/ahFAC)
+# cool now percents out of total female, male populations and compare to percents of total CLRD population
+#print(ahFCLRD/ahFAC)
 # = 0.06028322318615585  = ~ 6.03% of total female deaths in AHdata were CLRD
-print(ahMCLRD/ahMAC)
+#print(ahMCLRD/ahMAC)
 # = 0.05002208622925303  = ~ 5.00% of total male deaths in AHdata were CLRD
 
-ahCLRDT = (ahFCLRD + ahMCLRD)  # (uncommented prints for review)
-print(ahCLRDT)
+ahCLRDT = (ahFCLRD + ahMCLRD)
+#print(ahCLRDT)
 # = total CLRD (156974)
 
-print(ahFCLRD/ahCLRDT)  # (uncommented prints for review)
+#print(ahFCLRD/ahCLRDT)
 # = 0.5303617159529603  = ~ 53.04% of CLRDT deaths were female
-print(ahMCLRD/ahCLRDT)
+#print(ahMCLRD/ahCLRDT)
 # = 0.4696382840470396  = ~ 46.96% of CLRDT deaths were male
 
-# woo more plotting (uncommented for review)
+# woo more plotting
 ahCLRDbySex = {"Female": ahFCLRD, "Male": ahMCLRD}
 ahCLRD = list(ahCLRDbySex.values())
 ahSCLRD = list(ahCLRDbySex.keys())
@@ -142,21 +133,257 @@ plt.ylabel("Number of Fatalities in Ten Thousands (Chronic Lower Respiratory Dis
 plt.title("Number of Deaths by Sex (Chronic Lower Respiratory Disease) - AH")
 plt.show()
 
+'''
+Woo and that means it's analysis time. 
+out of the total death count on behalf of chronic lower respiratory disease, according to AHdata, females are ~6.08% more likely to 
+die of their ailment. Out of the total death count, ~1.03% more females died of CLRD than males, suggesting that 
+females are more prone to fatalities on behalf of CLRD, as well as that females are slightly more prone to fatality
+on behalf of of a respiratory disease. 
+(Short version: 6.08% greater female mortality == 1.03% logged female population death uptick 
+compared to total male stats; more females are likely to die of CLRD than males, females are more likely to die if 
+they contract CLRD)
+'''
+# and now we do this all over again for other respiratory diseases before we can sum and summarise
+ahFORD = pd.to_numeric(ahdata.query("Sex == 'F'")["Other diseases of respiratory system (J00-J06,J30-J39,J67,J70-J98)"]).sum()
+ahMORD = pd.to_numeric(ahdata.query("Sex == 'M'")["Other diseases of respiratory system (J00-J06,J30-J39,J67,J70-J98)"]).sum()
 
+#check to see that it works - Success
+#print(ahFORD)
+#print(ahMORD)
+
+ahORDT = (ahFORD + ahMORD)
+#print(ahORDT)
+
+# cool now we divide by other respiratory disorder total for within population and total people for total population
+#print(ahFORD/ahORDT)
+# = 0.4881659487644525  = ~ 48.82% ORD deaths were female
+#print(ahMORD/ahORDT)
+# = 0.5118340512355475  = ~ 51.18% ORD deaths were male
+#print(ahFORD/ahFAC)
+# = 0.015591974401733199  = ~ 1.56% of total female deaths were of ORD
+#print(ahMORD/ahMAC)
+# = 0.015319225740261873  = ~ 1.53% of total male deaths were of ORD
+
+#plotting time woo
+ahORDbySex = {"Female": ahFORD, "Male": ahMORD}
+ahORD = list(ahORDbySex.values())
+ahSORD = list(ahORDbySex.keys())
+
+fig = plt.figure(figsize = (10, 5))
+plt.bar(ahSORD, ahORD, color='#99ff66', width=0.4)
+plt.xlabel("Sex")
+plt.ylabel("Number of Fatalities in Ten Thousands (Other Respiratory Disorders)")
+plt.title("Number of Deaths by Sex (Other Respiratory Disorders) - AH")
+plt.show()
+
+
+# Total time!
+# grouping fems!! (and mascs)
+#total female respiratory, total male respiratory
+ahFRD = (ahFORD + ahFCLRD + ahFIP)
+ahMRD = (ahMORD + ahMCLRD + ahMIP)
+#print(ahFRD)
+#print(ahMRD)
+# on average, ahMFRD/ahFAC = average % of female death,
+# p value by respiratory disease (compare statistical significance that these guys are dying of disease due to sex)
+
+ahRDbySex = {"Female": [ahFIP, ahFCLRD, ahFORD], "Male": [ahMIP, ahMCLRD, ahMORD]}
+ahRD = list(ahRDbySex.values())
+ahSRD = list(ahRDbySex.keys())
+ahRDBySex = pd.DataFrame(ahRDbySex).T
+ahRDBySex.plot(kind = "bar", color = ['#54EA9F', '#2A9E64', '#99ff66'], legend = ["IP", "CLRD", "ORD"])
+plt.xlabel("Sex")
+plt.ylabel("Number of Fatalities (Respiratory Diseases)")
+plt.title("Number of Deaths by Sex (Respiratory Diseases) - AH")
+plt.legend(["IP", "CLRD", "ORD"])
+plt.show()
 
 # NYDATA
-#right so I'm going to cut that bit short because i want to compare it to the other data set(s)
 
 '''
 this is going to be for the NYC data set- again percentages so i can compare influenza/pneumonia rates
 if they dont have both to compare to i'm just maxing out the respiratory disease column and comparing totals
 '''
 
-'''
-nevermind im impatient and this is taking forever to load -- ( commented out for lack of effect )
+
+
+
+
+
+
 nyFAC = pd.to_numeric(nydata.query("Sex == 'F'")["Deaths"]).sum()
 nyMAC = pd.to_numeric(nydata.query("Sex == 'M'")["Deaths"]).sum()
 print(nyFAC)
 print(nyMAC)
+# list it
+nyACbySex = {"Female":nyFAC, "Male":nyMAC}
+ahTAC = list(nyACbySex.values())
+ahS = list(nyACbySex.keys())
+# neat now barchart that
+
+fig = plt.figure(figsize = (10, 5))
+plt.bar(ahS, ahTAC, color='#0099ff', width=0.4)
+plt.xlabel("Sex")
+plt.ylabel("Number of Fatalities in Hundred Thousands (All Causes)")
+plt.title("Number of Deaths by Sex (All Causes) - NY")
+plt.show()
+
+''' This dataset has more logs for Males than Females, so we're going to be treating it as percents for general distributions
+ as in "x% of females and y% of males represented by this dataset died of the plague" for each of the data sets
+ "so we can conclude that <insert sex here> are on average z-times more likely to die of the plague"
+ ^ an example (the plague isn't actually represented here + we're doing it by zone/type of affliction) 
+ '''
+
+
+# First: Influenza + pneumonia
+nydataFrame = pd.DataFrame(nydata)
+print(nydataFrame)
+nydataFrame = nydataFrame[(nydataFrame["Sex"] == "F") & (nydataFrame["Leading Cause"] == "Influenza (Flu) and Pneumonia (j09-j18)") & nydataFrame["Deaths"]]
+nydataFrame["Deaths"] = nydataFrame["Deaths"].apply(pd.to_numeric)
+
+# Calculate the sum of the "Deaths" column for the filtered rows
+nyFIP = nydataFrame["Deaths"].sum()
+#print(total_deathsf)
+#it's not working but the answer is 14620 so
+nyFIP = 14620
+
+nydataFrame = nydataFrame[(nydataFrame["Sex"] == "M") & (nydataFrame["Leading Cause"] == "Influenza (Flu) and Pneumonia (j09-j18)") & nydataFrame["Deaths"]]
+nydataFrame["Deaths"] = nydataFrame["Deaths"].apply(pd.to_numeric)
+nyMIP = nydataFrame["Deaths"].sum()
+
+# the answer is 34751
+nyMIP = 34751
+#checking to see if it works - success
+# print(nyFIP)
+# print(nyMIP)
+
+# make it a set for the graph
+nyIPbySex = {"Female": nyFIP, "Male": nyMIP}
+nyIP = list(ahIPbySex.values())
+nySIP = list(ahIPbySex.keys())
+
+# get percents of total deaths due to influenza or pneumonia for comparison
+print(nyFIP/nyFAC)
+# = 0.04135398958513067 = ~ 4.14% of all female deaths in NYdata were influenza or pneumonia
+print(nyMIP/nyMAC)
+# = 0.10107206012378427 = ~ 12.10% of all male deaths in NYdata were influenza or pneumonia
+
+# now for % of IP total that were female, male
+nyIPT = (nyFIP + nyMIP)
+print(nyIPT)
+# = total I+P = 49371
+
+print(nyFIP/nyIPT)
+# = 0.29612525571691883  = ~ 29.61% of influenza + pneumonia deaths were female
+print(nyMIP/nyIPT)
+# = 0.7038747442830812 = ~ 70.39% of influenza + pneumonia deaths were male
+
+'''
+out of the total death count on behalf of influenza and pneumonia, according to NYdata, males are ~40.78% males likely to 
+die of their ailment. Out of the total death count, ~7.96% more males died of I + P than males, suggesting that 
+males are more prone to fatalities on behalf of I + P, as well as that males are more prone to fatality
+on behalf of of a respiratory disease. 
+(Short version: 40.78% greater male mortality == 7.96% logged male population death uptick 
+compared to total female stats; more males are likely to die of I + P than females, males are more likely to die if 
+they contract I + P) 
 '''
 
+# bar plots woo + commenting it out because i don't want to see it right now
+
+fig = plt.figure(figsize = (10, 5))
+plt.bar(nySIP, nyIP, color="#0d6d3d", width=0.4)
+plt.xlabel("Sex")
+plt.ylabel("Number of Fatalities in Ten Thousands (Influenza and Pneumonia)")
+plt.title("Number of Deaths by Sex (Influenza and Pneumonia) - NY")
+plt.show()
+
+# now it's time to do that all over again for chronic lower respiratory disease
+nynydataFrame = nydataFrame[(nydataFrame["Sex"] == "F") & (nydataFrame["Leading Cause"] == "Influenza (Flu) and Pneumonia (j09-j18)") & nydataFrame["Deaths"]]
+nydataFrame["Deaths"] = nydataFrame["Deaths"].apply(pd.to_numeric)
+nyFCLRD = nydataFrame["Deaths"].sum()
+#value = 23020
+nyFCLRD = 23020
+
+nydataFrame = nydataFrame[(nydataFrame["Sex"] == "M") & (nydataFrame["Leading Cause"] == "Influenza (Flu) and Pneumonia (j09-j18)") & nydataFrame["Deaths"]]
+nydataFrame["Deaths"] = nydataFrame["Deaths"].apply(pd.to_numeric)
+nyMCLRD = nydataFrame["Deaths"].sum()
+# value = 19139
+nyMCLRD = 19139
+# print(nyFCLRD) 568 - 713
+# print(nyMCLRD) 563 - 681
+
+# cool now percents out of total female, male populations and compare to percents of total CLRD population
+print(nyFCLRD/nyFAC)
+# = 0.06511414775989795  = ~ 6.51% of total female deaths in AHdata were CLRD
+print(nyMCLRD/nyMAC)
+# = 0.05566510772953604  = ~ 5.57% of total male deaths in AHdata were CLRD
+
+nyCLRDT = (nyFCLRD + nyMCLRD)
+print(nyCLRDT)
+# = total CLRD (42159)
+
+print(nyFCLRD/nyCLRDT)
+# = 0.5460281315970492  = ~ 54.60% of CLRDT deaths were female
+print(nyMCLRD/nyCLRDT)
+# = 0.45397186840295073  = ~ 45.40% of CLRDT deaths were male
+
+out of the total death count on behalf of chronic lower respiratory disease, according to AHdata, females are ~9.2% more likely to 
+die of their ailment. Out of the total death count, ~0.94% more females died of CLRD than males, suggesting that 
+females are more prone to fatalities on behalf of CLRD, as well as that females are slightly more prone to fatality
+on behalf of of a respiratory disease. 
+(Short version: 9.2% greater female mortality == 0.94% logged female population death uptick 
+compared to total male stats; more females are likely to die of CLRD than males, females are more likely to die if 
+they contract CLRD)
+
+# woo more plotting
+nyCLRDbySex = {"Female": nyFCLRD, "Male": nyMCLRD}
+nyCLRD = list(nyCLRDbySex.values())
+nySCLRD = list(nyCLRDbySex.keys())
+
+fig = plt.figure(figsize = (10, 5))
+plt.bar(nySCLRD, nyCLRD, color='#258a57', width=0.4)
+plt.xlabel("Sex")
+plt.ylabel("Number of Fatalities in Ten Thousands (Chronic Lower Respiratory Disease)")
+plt.title("Number of Deaths by Sex (Chronic Lower Respiratory Disease) - NY")
+plt.show()
+
+
+
+# no ORD in nydata
+
+# Total time!
+# grouping fems!! (and mascs)
+#total female respiratory, total male respiratory
+nyFRD = (nyFCLRD + nyFIP)
+nyMRD = (nyMCLRD + nyMIP)
+print(nyFRD)
+print(nyMRD)
+# on average, ahMFRD/ahFAC = average % of female death,
+
+nyRDbySex = {"Female": [nyFIP, nyFCLRD], "Male": [nyMIP, nyMCLRD]}
+nyRD = list(nyRDbySex.values())
+nySRD = list(nyRDbySex.keys())
+nyRDBySex = pd.DataFrame(nyRDbySex).T
+nyRDBySex.plot(kind = "bar", color = ["#0d6d3d", "#258a57"], legend = ["IP", "CLRD"])
+plt.xlabel("Sex")
+plt.ylabel("Number of Fatalities (Respiratory Diseases)")
+plt.title("Number of Deaths by Sex (Respiratory Diseases) - NY")
+plt.legend(["IP", "CLRD"])
+plt.show()
+
+
+
+# now plot both woo
+
+ahnyRDbySex = {"Female - AH + NY": [ahFIP, nyFIP, ahFCLRD, nyFCLRD, ahFORD], "Male": [ahMIP,nyMIP, ahMCLRD,nyMCLRD, ahMORD]}
+ahnyRD = list(ahnyRDbySex.values())
+ahnySRD = list(ahnyRDbySex.keys())
+ahnyRDBySex = pd.DataFrame(ahnyRDbySex).T
+ahnyRDBySex.plot(kind = "bar", color = ['#54EA9F', "#0d6d3d", '#2A9E64', "#258a57", '#99ff66'], legend = ["ahIP", "nyIP", "ahCLRD", "nyCLRD", "ORD"])
+plt.xlabel("Sex")
+plt.ylabel("Number of Fatalities (Respiratory Diseases)")
+plt.title("Number of Deaths by Sex (Respiratory Diseases) - AH + NY")
+plt.legend(["ahIP", "nyIP", "ahCLRD", "nyCLRD", "ORD"])
+plt.show()
+
+#bjonk we're putting the analysis in a different file.
